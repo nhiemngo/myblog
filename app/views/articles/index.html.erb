@@ -1,0 +1,45 @@
+<div class="container">
+<br>
+  <div class="col-sm-8">
+        <a class="navbar-brand" href="#">MyBlog</a>
+              <%= link_to 'Home', articles_path, class:'btn btn-secondary'%><span class="sr-only">(current)</span>
+              <%= link_to 'New Post', new_article_path(@articles), class:'btn btn-secondary' %>
+  </div>
+  <br>
+  <p id="notice"><%= notice %></p>
+
+<div class="row">
+  <div class="col-sm-8">
+  <% @articles.each do |article| %>
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"><%= article.title %></h4>
+        <p class="card-text"><%= @markdown.render(article.body).html_safe %></p>
+        <p align="right"><i>Created on <%=article.created_at.in_time_zone("Hanoi").to_s(:short)%> GMT+7</i></p>
+      </div>
+      <div class="card-footer">
+        <%= link_to 'Edit; ', edit_article_path(article) %>
+        <%= link_to "Delete; ", article_path(article), method: :delete, data: { confirm: 'Are you sure you want to delete this post?'} %>
+        Tags: <%= raw article.tag_list.map { |t| link_to t, tag_path(t) }.join(', ')   %>
+      </div>
+    </div>
+    <br>
+  <% end %>
+
+  <a class="btn btn-success dropdown-toggle" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+  See all tags
+  </a>
+  <div class="collapse" id="collapseExample">
+    <div class="card card-block">
+      <% tag_cloud Article.tag_counts, %w{s m l} do |tag, css_class| %>
+        <%= link_to tag.name, tag_path(tag.name)%>
+      <% end %>
+    </div>
+  </div>
+
+
+
+
+  </div>
+</div>
+</div>
